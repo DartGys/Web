@@ -1,0 +1,28 @@
+﻿/* Основной стиль для таблицы-карточек */
+.card-table {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Разбивает таблицу на колонки по 200 пикселей (измените по вашим требованиям) */
+    gap: 20px; /* Расстояние между карточками */
+    justify-content: center; /* Выравнивание карточек по центру */
+}
+
+/* Стиль для ячейки карточки */
+.card-cell {
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 5px;
+    padding: 10px; /* Отступы внутри карточки */
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1); /* Тень карточки */
+}
+
+/* Опционально: стили для заголовка и контента в карточке */
+.card-title {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.card-content {
+    font-size: 14px;
+}
+
+/* Пример использования: добавьте класс .card-table к вашей таблице */
