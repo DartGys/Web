@@ -170,5 +170,19 @@ namespace WebLabaC1.Controllers
         {
           return _context.Shops.Any(e => e.Id == id);
         }
+
+        [HttpGet("getShops")]
+        public async Task<IActionResult> getShops()
+        {
+            try
+            {
+                var objects = await _context.Shops.ToListAsync(); // Замініть Objects на вашу модель об'єктів
+                return Ok(objects);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Помилка: {ex.Message}");
+            }
+        }
     }
 }

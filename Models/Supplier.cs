@@ -13,7 +13,7 @@ public partial class Supplier
 
     public int ShopId { get; set; }
 
-    public virtual ICollection<Product> Products { get; set; } = new List<Product>();
+    public virtual ICollection<Product> Products { get; set; } = new List<Product>(); 
 
     public virtual Shop Shop { get; set; }
 }

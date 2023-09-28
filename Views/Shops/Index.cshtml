@@ -52,6 +52,49 @@
     </tbody>
 </table>
 
+<!-- HTML-код для відображення мапи -->
+<div id="map" style="height: 400px;"></div>
+
+<script>
+    function initMap() {
+        var map = new google.maps.Map(document.getElementById('map'), {
+            center: { lat: 50.38867260317045, lng: 30.49026364368214 }, // Задайте початкові координати мапи
+            zoom: 15 // Задайте збільшення мапи
+        });
+
+        $.ajax({
+            url: 'api/getShops/getShops', // Замініть це на URL вашого серверного методу
+            method: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                // data - це масив об'єктів, які ви отримали з сервера
+                data.forEach(function (object) {
+                    var marker = new google.maps.Marker({
+                        position: { lat: object.latitude, lng: object.longitude },
+                        map: map,
+                        title: object.name // Підпис для маркера
+                    });
+                });
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    }
+
+    async function loadMapScript() {
+        const apiKey = 'AIzaSyCl1GBKDhYN96vdIntqapi6WfnxukqdHew';
+        const script = document.createElement('script');
+        script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&callback=initMap`;
+        script.defer = true;
+        script.async = true;
+        document.body.appendChild(script);
+    }
+
+    loadMapScript();
+</script>
+
+
 <div class="container">
     <div id="chart1"></div>
 </div>
