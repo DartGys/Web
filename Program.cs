@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using System.Globalization;
 using WebLabaC1.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,6 +11,11 @@ builder.Services.AddDbContext<ShopWebLabaContext>(options => options.UseSqlServe
     builder.Configuration.GetConnectionString("DefaultConnection")));
 
 var app = builder.Build();
+
+var cultureInfo = new CultureInfo("en-US"); // Встановіть потрібну культуру (з комою)
+cultureInfo.NumberFormat.CurrencyDecimalSeparator = ",";
+CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
+CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

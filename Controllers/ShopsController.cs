@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using NuGet.Protocol.Core.Types;
 using WebLabaC1.Models;
 
 namespace WebLabaC1.Controllers
@@ -21,9 +22,7 @@ namespace WebLabaC1.Controllers
         // GET: Shops
         public async Task<IActionResult> Index()
         {
-              return _context.Shops != null ? 
-                          View(await _context.Shops.ToListAsync()) :
-                          Problem("Entity set 'ShopWebLabaContext.Shops'  is null.");
+              return View(await _context.Shops.ToListAsync());
         }
 
         // GET: Shops/Details/5
@@ -55,7 +54,7 @@ namespace WebLabaC1.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Country")] Shop shop)
+        public async Task<IActionResult> Create([Bind("Id,Name,Country,Latitude,Longitude")] Shop shop)
         {
             if (ModelState.IsValid)
             {
@@ -65,7 +64,7 @@ namespace WebLabaC1.Controllers
             }
             return View(shop);
         }
-
+        
         // GET: Shops/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -87,7 +86,7 @@ namespace WebLabaC1.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Country")] Shop shop)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Country,Latitude,Longitude")] Shop shop)
         {
             if (id != shop.Id)
             {
@@ -144,9 +143,22 @@ namespace WebLabaC1.Controllers
             {
                 return Problem("Entity set 'ShopWebLabaContext.Shops'  is null.");
             }
-            var shop = await _context.Shops.FindAsync(id);
+            var shop = await _context.Shops
+                .Include(s => s.Products)
+                .Include(s => s.Suppliers)
+                .FirstAsync(s => s.Id == id);
             if (shop != null)
             {
+                foreach(var item in shop.Products)
+                {
+                    _context.Products.Remove(item);
+                }
+
+                foreach(var item in shop.Suppliers)
+                {
+                    _context.Suppliers.Remove(item);
+                }
+
                 _context.Shops.Remove(shop);
             }
             
@@ -156,7 +168,7 @@ namespace WebLabaC1.Controllers
 
         private bool ShopExists(int id)
         {
-          return (_context.Shops?.Any(e => e.Id == id)).GetValueOrDefault();
+          return _context.Shops.Any(e => e.Id == id);
         }
     }
 }

@@ -149,9 +149,16 @@ namespace WebLabaC1.Controllers
             {
                 return Problem("Entity set 'ShopWebLabaContext.Suppliers'  is null.");
             }
-            var supplier = await _context.Suppliers.FindAsync(id);
+            var supplier = await _context.Suppliers
+                .Include(s => s.Products)
+                .FirstAsync(s => s.Id == id);
             if (supplier != null)
             {
+                foreach(var product in supplier.Products)
+                {
+                    _context.Products.Remove(product);
+                }
+
                 _context.Suppliers.Remove(supplier);
             }
             

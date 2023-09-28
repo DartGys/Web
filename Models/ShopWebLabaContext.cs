@@ -22,7 +22,7 @@ public partial class ShopWebLabaContext : DbContext
     public virtual DbSet<Supplier> Suppliers { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseSqlServer("Server=DESKTOP-CFOLTDF\\SQLEXPRESS; Database=ShopWebLaba; Trusted_Connection=True; TrustServerCertificate =true;");
+        => optionsBuilder.UseSqlServer("Server=DESKTOP-CFOLTDF\\SQLEXPRESS;Database=ShopWebLaba;Trusted_Connection=True;Trust Server Certificate=True;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -30,10 +30,18 @@ public partial class ShopWebLabaContext : DbContext
         {
             entity.ToTable("Product");
 
-            entity.Property(e => e.Description).HasMaxLength(200);
-            entity.Property(e => e.Image).HasMaxLength(200);
-            entity.Property(e => e.Name).HasMaxLength(50);
-            entity.Property(e => e.Price).HasMaxLength(50);
+            entity.Property(e => e.Description)
+                .IsRequired()
+                .HasMaxLength(200);
+            entity.Property(e => e.Image)
+                .IsRequired()
+                .HasMaxLength(200);
+            entity.Property(e => e.Name)
+                .IsRequired()
+                .HasMaxLength(50);
+            entity.Property(e => e.Price)
+                .IsRequired()
+                .HasMaxLength(50);
 
             entity.HasOne(d => d.Shop).WithMany(p => p.Products)
                 .HasForeignKey(d => d.ShopId)
@@ -50,16 +58,24 @@ public partial class ShopWebLabaContext : DbContext
         {
             entity.ToTable("Shop");
 
-            entity.Property(e => e.Country).HasMaxLength(50);
-            entity.Property(e => e.Name).HasMaxLength(50);
+            entity.Property(e => e.Country)
+                .IsRequired()
+                .HasMaxLength(50);
+            entity.Property(e => e.Name)
+                .IsRequired()
+                .HasMaxLength(50);
         });
 
         modelBuilder.Entity<Supplier>(entity =>
         {
             entity.ToTable("Supplier");
 
-            entity.Property(e => e.Country).HasMaxLength(50);
-            entity.Property(e => e.Name).HasMaxLength(50);
+            entity.Property(e => e.Country)
+                .IsRequired()
+                .HasMaxLength(50);
+            entity.Property(e => e.Name)
+                .IsRequired()
+                .HasMaxLength(50);
 
             entity.HasOne(d => d.Shop).WithMany(p => p.Suppliers)
                 .HasForeignKey(d => d.ShopId)
